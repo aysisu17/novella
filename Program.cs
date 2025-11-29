@@ -1,227 +1,168 @@
-﻿using System;
+using System;
+using System.Threading;
 
-namespace AdventureGame
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main(string[] args)
+        // отслеживание наличия предмета, влияющего на концовки
+        bool hasOrb = false;
+
+        Console.WriteLine("НОВЕЛЛА: ПЕЩЕРА ЗАБЫТЫХ ТАЙН");
+        Console.WriteLine("Вы стоите перед входом в темную пещеру. Кажется, вы ищете артефакт.");
+
+    // шаг 1: вход в пещеру
+    Step1:
+        Console.WriteLine("\nВы у входа. Холодный воздух манит внутрь.");
+        Console.WriteLine("1. Зайти в пещеру.");
+        Console.WriteLine("2. Отказаться от затеи и уйти.");
+
+        string choice = Console.ReadLine();
+
+        if (choice == "1") goto Step2;
+        else if (choice == "2") goto Ending_Coward; // концовка 1
+        else { Console.WriteLine("Неверный ввод."); goto Step1; }
+
+    // шаг 2: главный зал
+    Step2:
+        Console.WriteLine("\nВнутри просторный зал. В центре тускло светится синий кристалл.");
+        Console.WriteLine("1. Подойти к кристаллу.");
+        Console.WriteLine("2. Пойти в левый туннель.");
+        Console.WriteLine("3. Пойти в правый туннель.");
+
+        choice = Console.ReadLine();
+
+        if (choice == "1") goto Step3;
+        else if (choice == "2") goto Step4;
+        else if (choice == "3") goto Step5;
+        else { Console.WriteLine("Неверный ввод."); goto Step2; }
+
+    // шаг 3: кристалл
+    Step3:
+        Console.WriteLine("\nВы касаетесь кристалла. Он рассыпается, оставляя в руке Светящуюся Сферу.");
+        hasOrb = true;
+        Thread.Sleep(1500);
+        goto Step2; // возвращаемся в главный зал
+
+    // шаг 4: левый туннель (безопасный путь)
+    Step4:
+        Console.WriteLine("\nЛевый туннель выводит вас к подземному озеру.");
+        goto Step6;
+
+    // шаг 5: правый туннель (Опасность)
+    Step5:
+        Console.WriteLine("\nПравый туннель обваливается за спиной! Вы чудом пробегаете вперед.");
+        goto Step6;
+
+    // шаг 6: подземное озеро
+    Step6:
+        Console.WriteLine("\nВы у озера. В воде что-то блестит.");
+        Console.WriteLine("1. Поискать что-то полезное в воде.");
+        Console.WriteLine("2. Переплыть озеро к выходу.");
+
+        choice = Console.ReadLine();
+
+        if (choice == "1") goto Step7;
+        else if (choice == "2") goto Step8;
+        else { Console.WriteLine("Неверный ввод."); goto Step6; }
+
+    // шаг 7: поиск в воде (Найти второй предмет)
+    Step7:
+        Console.WriteLine("\nВы находите старый, но крепкий меч на дне озера.");
+        goto Step8;
+
+    // шаг 8: другая сторона озера
+    Step8:
+        Console.WriteLine("\nВы перебрались через озеро. Перед вами две двери: деревянная и металлическая.");
+        Console.WriteLine("1. Открыть деревянную дверь.");
+        Console.WriteLine("2. Открыть металлическую дверь.");
+
+        choice = Console.ReadLine();
+
+        if (choice == "1") goto Step9;
+        else if (choice == "2") goto Step10;
+        else { Console.WriteLine("Неверный ввод."); goto Step8; }
+
+    // шаг 9: деревянная дверь (Ловушка)
+    Step9:
+        Console.WriteLine("\nДеревянная дверь была ловушкой. Вы проваливаетесь в бездну.");
+        goto Ending_Void; // концовка 2
+
+    // шаг 10: металлическая дверь (Комната Стража)
+    Step10:
+        Console.WriteLine("\nМеталлическая дверь ведет в комнату, где спит древний страж.");
+        Console.WriteLine("1. Попытаться тихо прокрасться мимо.");
+        Console.WriteLine("2. Попытаться разбудить стража.");
+
+        choice = Console.ReadLine();
+
+        if (choice == "1") goto Step11;
+        else if (choice == "2") goto Step12;
+        else { Console.WriteLine("Неверный ввод."); goto Step10; }
+
+    // шаг 11: прокрасться мимо
+    Step11:
+        Console.WriteLine("\nВам удается тихо проскользнуть мимо стража. Вы видите выход.");
+        goto Step13;
+
+    // шаг 12: разбудить стража
+    Step12:
+        Console.WriteLine("\nСтраж просыпается! Он слишком силен, чтобы сражаться.");
+        goto Ending_Captured; // концовка 3
+
+    // шаг 13: финальный зал
+    Step13:
+        Console.WriteLine("\nВы в последнем зале. Здесь лежит искомый артефакт, но он охраняется магическим барьером.");
+        goto Step14;
+
+    // шаг 14: барьер
+    Step14:
+        Console.WriteLine("\nБарьер требует энергии для отключения.");
+        if (hasOrb)
         {
-            Console.Title = "Приключенческая новелла: Остров Судьбы";
-
-            // приветствие игрока
-            Console.WriteLine("Ты просыпаешься на берегу необитаемого острова...");
-            Console.WriteLine("Перед тобой лес и пляж.");
-            Console.WriteLine("1. Пойти в лес");
-            Console.WriteLine("2. Осмотреть пляж");
-
-            int step = 1; // текущий шаг
-            int choice = GetChoice(); // выбор игрока
-
-            while (true)
-            {
-                switch (step)
-                {
-                    case 1:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nТы идёшь в лес. Слышишь странный шорох.");
-                            Console.WriteLine("1. Проверить, кто там");
-                            Console.WriteLine("2. Спрятаться за дерево");
-                            step = 2;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nТы идёшь вдоль пляжа и находишь обломки лодки.");
-                            Console.WriteLine("1. Осмотреть лодку");
-                            Console.WriteLine("2. Вернуться к лесу");
-                            step = 3;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 2:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nТы находишь раненого попугая. Он говорит человеческим голосом!");
-                            Console.WriteLine("1. Помочь ему");
-                            Console.WriteLine("2. Уйти дальше");
-                            step = 4;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nТы прячешься. Проходит время, темнеет.");
-                            Console.WriteLine("1. Развести костёр");
-                            Console.WriteLine("2. Идти в темноте");
-                            step = 5;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 3:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nВ лодке ты находишь карту и компас.");
-                            Console.WriteLine("1. Взять находки");
-                            Console.WriteLine("2. Не трогать — вдруг опасно");
-                            step = 6;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nТы возвращаешься к лесу и слышишь рёв зверя!");
-                            Console.WriteLine("1. Спрятаться в кустах");
-                            Console.WriteLine("2. Взобраться на дерево");
-                            step = 7;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 4:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nПопугай благодарит и обещает показать путь к сокровищам.");
-                            Console.WriteLine("1. Следовать за попугаем");
-                            Console.WriteLine("2. Не верить и идти самому");
-                            step = 8;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nТы уходишь. Через час теряешь направление.");
-                            Console.WriteLine("1. Двигаться по солнцу");
-                            Console.WriteLine("2. Идти наугад");
-                            step = 9;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 5:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nКостёр замечают спасатели!");
-                            Console.WriteLine("1. Подать сигнал");
-                            Console.WriteLine("2. Спрятаться");
-                            step = 10;
-                        }
-                        else
-                        {
-                            // плохая концовка 1
-                            Console.WriteLine("\nТы падаешь в овраг и теряешь сознание...");
-                            End("Ты не смог выбраться. Конец приключения.", false);
-                            return;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 6:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nТеперь у тебя есть карта! Можно выбрать путь.");
-                            Console.WriteLine("1. К центру острова");
-                            Console.WriteLine("2. На север");
-                            step = 11;
-                        }
-                        else
-                        {
-                            // плохая концовка 2
-                            Console.WriteLine("\nБез карты ты заблудился в лесу...");
-                            End("Ты блуждаешь по острову, пока не иссякли силы.", false);
-                            return;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 7:
-                        if (choice == 1)
-                        {
-                            Console.WriteLine("\nТы прячешься — мимо проходит стая волков.");
-                            Console.WriteLine("1. Продолжить путь");
-                            Console.WriteLine("2. Вернуться к берегу");
-                            step = 12;
-                        }
-                        else
-                        {
-                            // плохая концовка 3
-                            Console.WriteLine("\nВетка ломается, ты падаешь и теряешь сознание...");
-                            End("Тебя больше никто не видел.", false);
-                            return;
-                        }
-                        choice = GetChoice();
-                        break;
-
-                    case 8:
-                        if (choice == 1)
-                        {
-                            // хорошая концовка 1
-                            End("Попугай приводит тебя к сундуку с золотом! Ты разбогател и уплыл на лодке!", true);
-                        }
-                        else
-                        {
-                            // плохая концовка 4
-                            End("Ты не послушал попугая и заблудился в джунглях. Конец.", false);
-                        }
-                        return;
-
-                    case 10:
-                        if (choice == 1)
-                        {
-                            // хорошая концовка 2
-                            End("Спасатели замечают тебя и подбирают!", true);
-                        }
-                        else
-                        {
-                            // плохая концовка 5
-                            End("Ты спрятался, думая, что это пираты... Но это был шанс спастись.", false);
-                        }
-                        return;
-
-                    case 11:
-                        if (choice == 1)
-                        {
-                            End("В центре острова ты находишь древний храм и артефакт, который исполняет желания.", true);
-                        }
-                        else
-                        {
-                            End("На севере ты находишь хижину и еду — выжил, но остался на острове.", false);
-                        }
-                        return;
-
-                    case 12:
-                        if (choice == 1)
-                        {
-                            End("Ты находишь лагерь спасателей — они забирают тебя домой!", true);
-                        }
-                        else
-                        {
-                            End("Ты возвращаешься к пляжу, но никого не находишь. Остров становится твоим домом.", false);
-                        }
-                        return;
-
-                    default:
-                        End("Ты слишком долго блуждал... Остров поглотил тебя.", false);
-                        return;
-                }
-            }
+            Console.WriteLine("Вы используете Светящуюся Сферу! Она разрушает барьер.");
+            goto Step15;
+        }
+        else
+        {
+            Console.WriteLine("У вас нет источника энергии. Выход закрыт, вы заперты здесь навсегда.");
+            goto Ending_Trapped; // концовка 4
         }
 
-        // метод проверки корректности выбора (1 или 2)
-        static int GetChoice()
-        {
-            int choice;
-            while (!int.TryParse(Console.ReadLine(), out choice) || (choice != 1 && choice != 2))
-            {
-                Console.WriteLine("Введите 1 или 2:");
-            }
-            return choice;
-        }
+    // шаг 15: Артефакт
+    Step15:
+        Console.WriteLine("\n[ШАГ 15] Вы забираете артефакт. Пещера начинает трястись, но вы успеваете убежать.");
+        goto Ending_Victory; // концовка 5
 
-        // метод завершения игры
-        static void End(string text, bool good)
-        {
-            Console.WriteLine("\n" + text);
-            if (good)
-                Console.WriteLine(" Хорошая концовка!");
-            else
-                Console.WriteLine(" Плохая концовка.");
 
-        }
+    // концовки
+
+    Ending_Coward:
+        Console.WriteLine("\nТрус");
+        Console.WriteLine("Вы вернулись домой. Приключение окончено, артефакт остался в пещере.");
+        goto End;
+
+    Ending_Void:
+        Console.WriteLine("\nПадение");
+        Console.WriteLine("Вы упали в бездну и погибли.");
+        goto End;
+
+    Ending_Captured:
+        Console.WriteLine("\nПленник");
+        Console.WriteLine("Страж пленил вас. Вы проведете остаток жизни в темнице пещеры.");
+        goto End;
+
+    Ending_Trapped:
+        Console.WriteLine("\nВ западне");
+        Console.WriteLine("Вы заперты в последнем зале, не в силах преодолеть барьер. Конец пути.");
+        goto End;
+
+    Ending_Victory:
+        Console.WriteLine("\nПобеда");
+        Console.WriteLine("Вы выбрались из пещеры с артефактом. Выполнено! Вы герой!");
+        goto End;
+
+    End:
+        Console.WriteLine("\nИгра окончена.");
     }
 }
