@@ -20,7 +20,7 @@
 
 1.  **Клонируйте репозиторий**
     ```bash
-    git clone https://github.com/aysisu17/novella/tree/master
+    git clone [https://github.com/aysisu17/novella/tree/master](https://github.com/aysisu17/novella.git)
     cd your-repo
     ```
 
